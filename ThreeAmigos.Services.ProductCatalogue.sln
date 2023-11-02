@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreeAmigos.Services.ProductCatalogue.API", "ThreeAmigos.Services.ProductCatalogue.API\ThreeAmigos.Services.ProductCatalogue.API.csproj", "{D91FEB03-E51C-4B8E-8BA4-7BC47F50B8FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreeAmigos.Services.ProductCatalogue.UnitTests", "ThreeAmigos.Services.ProductCatalogue.UnitTests\ThreeAmigos.Services.ProductCatalogue.UnitTests.csproj", "{B3507775-6492-4CBA-AB2B-EFF8D349686C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D91FEB03-E51C-4B8E-8BA4-7BC47F50B8FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D91FEB03-E51C-4B8E-8BA4-7BC47F50B8FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D91FEB03-E51C-4B8E-8BA4-7BC47F50B8FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D91FEB03-E51C-4B8E-8BA4-7BC47F50B8FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3507775-6492-4CBA-AB2B-EFF8D349686C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3507775-6492-4CBA-AB2B-EFF8D349686C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3507775-6492-4CBA-AB2B-EFF8D349686C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3507775-6492-4CBA-AB2B-EFF8D349686C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
