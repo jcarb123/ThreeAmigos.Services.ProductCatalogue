@@ -14,7 +14,7 @@ env:
   TESTRESULTS_PATH: ./unit-test-results
 
 jobs:
-  build:
+  Build-And-Test:
     runs-on: ubuntu-latest
 
     steps:
@@ -57,11 +57,11 @@ jobs:
           name: build
           path: ${{ env.PUBLISH_PATH }}
 
-  deploy:
+  Deploy-Production:
     runs-on: ubuntu-latest
     needs: build
     environment:
-      name: 'Live'
+      name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
@@ -76,6 +76,6 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'thamco-product-catalogue-api-live'
-          slot-name: 'Live'
+          slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1096CEE3A11C4E31AEF313D4A0E6367E }}
           package: ${{ env.PUBLISH_PATH }}  
