@@ -61,7 +61,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     environment:
-      name: 'Production'
+      name: 'Live'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
@@ -76,6 +76,6 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'thamco-product-catalogue-api-live'
-          slot-name: 'Production'
+          slot-name: 'Live'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1096CEE3A11C4E31AEF313D4A0E6367E }}
           package: ${{ env.PUBLISH_PATH }}  
