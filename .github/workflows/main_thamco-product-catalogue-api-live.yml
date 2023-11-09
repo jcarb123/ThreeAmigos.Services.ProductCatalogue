@@ -37,7 +37,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: build
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: /myapp
 
   deploy:
     runs-on: ubuntu-latest
