@@ -11,6 +11,7 @@ env:
   BUILD_CONFIGURATION: Release
   PROJECT_PATH: ./ThreeAmigos.Services.ProductCatalogue.API
   PUBLISH_PATH: ./myapi
+  TESTRESULTS_PATH: ./unit-test-results
 
 jobs:
   build:
@@ -27,6 +28,21 @@ jobs:
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
+
+      - name: Run unit tests
+        run: |
+          dotnet test \
+            --configuration $BUILD_CONFIGURATION \
+            --no-build \
+            --logger trx \
+            --results-directory $TESTRESULTS_PATH
+
+      - name: Store test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: ${{ env.TESTRESULTS_PATH }}
+        if: ${{ always() }} 
 
       - name: dotnet publish
         run: |
