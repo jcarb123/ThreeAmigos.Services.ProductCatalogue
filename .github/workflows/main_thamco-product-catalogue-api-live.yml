@@ -59,4 +59,4 @@ jobs:
           app-name: 'thamco-product-catalogue-api-live'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7A8A4459781E4E4ABD2AADCF650DFBE2 }}
-          package: .
+          package: /myapp
