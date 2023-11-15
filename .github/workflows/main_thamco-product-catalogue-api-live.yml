@@ -76,5 +76,5 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'thamco-product-catalogue-api-live'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1096CEE3A11C4E31AEF313D4A0E6367E }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: ${{ env.PUBLISH_PATH }}  
