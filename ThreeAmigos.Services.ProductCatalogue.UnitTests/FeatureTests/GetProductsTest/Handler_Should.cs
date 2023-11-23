@@ -18,12 +18,12 @@ public class HandlerShould : TestBase
         // Given
         var query = new GetProducts.Query();
 
-        var expectedArticles = new List<Product>
+        var expectedProducts = new List<Product>
         {
             ProductStub
         };
 
-        MockService.Setup(x => x.GetProducts()).ReturnsAsync(expectedArticles);
+        MockService.Setup(x => x.GetProducts()).ReturnsAsync(expectedProducts);
 
 
         var handler = new GetProducts.Handler(_logger, MockService.Object);
@@ -34,6 +34,6 @@ public class HandlerShould : TestBase
         // Then
         result.ShouldNotBeNull();
         result.Products.ShouldNotBeNull();
-        result.Products.ShouldBe(expectedArticles);
+        result.Products.ShouldBe(expectedProducts);
     }
 }
