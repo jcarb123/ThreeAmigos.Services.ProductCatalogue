@@ -21,7 +21,7 @@ public class ProductCatalogueService : IProductCatalogueService
         _retryPolicy = Policy
             .Handle<HttpRequestException>()
             .OrResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
-            .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(2), (outcome, timespan, retryAttempt, context) =>
+            .WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(2), (outcome, timespan, retryAttempt, context) =>
             {
                 _logger.LogWarning(
                     $"Retry No - {retryAttempt}");
@@ -42,8 +42,20 @@ public class ProductCatalogueService : IProductCatalogueService
         }
         catch (HttpRequestException e)
         {
-            _logger.LogError($"Failed to retrieve products:");
+            _logger.LogError("Failed to retrieve products:");
             throw new Exception("Unable to retrieve products after multiple retries.", e);
         }
+    }
+
+    public async Task<IEnumerable<Product>> SearchProducts(string searchTerm)
+    {
+        var products = await GetProducts();
+        var productList = products.ToList();
+
+        if (string.IsNullOrWhiteSpace(searchTerm)) return productList;
+
+        var filteredProducts = productList.Where(x => x.Name.ToLower().Contains(searchTerm.ToLower())).ToList();
+
+        return filteredProducts.Any() ? filteredProducts : productList;
     }
 }

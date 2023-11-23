@@ -5,12 +5,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options => { options.CustomSchemaIds(type => type.ToString()); });
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 builder.Services.AddCors();
 
-    builder.Services.AddScoped<IProductCatalogueService, ProductCatalogueService>();
+builder.Services.AddScoped<IProductCatalogueService, ProductCatalogueService>();
 
 builder.Services.AddHttpClient<IProductCatalogueService, ProductCatalogueService>(client =>
 {

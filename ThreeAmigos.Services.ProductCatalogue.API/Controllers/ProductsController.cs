@@ -2,6 +2,7 @@ using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ThreeAmigos.Services.ProductCatalogue.API.Operations.GetProducts;
+using ThreeAmigos.Services.ProductCatalogue.API.Operations.SearchProducts;
 
 namespace ThreeAmigos.Services.ProductCatalogue.API.Controllers;
 
@@ -31,6 +32,14 @@ public class ProductsController : ControllerBase
 
         if (!result.Products.Any()) return NotFound();
 
+        return Ok(result);
+    }
+
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [HttpGet("search")]
+    public async Task<ActionResult<SearchProducts.Result>> SearchProducts([FromQuery] SearchProducts.Command command)
+    {
+        var result = await _mediator.Send(command);
         return Ok(result);
     }
 }
