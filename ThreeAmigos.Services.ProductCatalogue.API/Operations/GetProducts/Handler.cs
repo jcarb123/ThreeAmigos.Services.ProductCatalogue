@@ -7,8 +7,8 @@ public static partial class GetProducts
 {
     public class Handler : IRequestHandler<Query, Result>
     {
-        private readonly IProductCatalogueService _productService;
         private readonly ILogger<Handler> _logger;
+        private readonly IProductCatalogueService _productService;
 
         public Handler(ILogger<Handler> logger, IProductCatalogueService productService)
         {
@@ -22,9 +22,9 @@ public static partial class GetProducts
         {
             _logger.LogInformation("Retrieving all products....");
 
-            var products = await _productService.GetProducts();
+            var products = (await _productService.GetProducts()).ToList();
 
-            _logger.LogInformation($"Successfully retrieved. Total products - {products.Count()}");
+            _logger.LogInformation($"Successfully retrieved. Total products - {products.Count}");
             return new Result
             {
                 Products = products

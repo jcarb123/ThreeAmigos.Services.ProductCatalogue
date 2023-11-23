@@ -17,7 +17,7 @@ builder.Services.AddScoped<IProductCatalogueService, ProductCatalogueService>();
 
 builder.Services.AddHttpClient<IProductCatalogueService, ProductCatalogueService>(client =>
 {
-    client.BaseAddress = new Uri("http://dodgydealers.azurewebsites.net");
+    client.BaseAddress = new Uri("http://undercutters.azurewebsites.net");
 });
 
 var app = builder.Build();

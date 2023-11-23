@@ -9,19 +9,25 @@ namespace ThreeAmigos.Services.ProductCatalogue.API.Services;
 public class ProductCatalogueService : IProductCatalogueService
 {
     private readonly HttpClient _httpClient;
-    private readonly AsyncRetryPolicy<HttpResponseMessage> _retryPolicy;
+    private readonly ILogger<ProductCatalogueService> _logger;
     private readonly IMapper _mapper;
+    private readonly AsyncRetryPolicy<HttpResponseMessage> _retryPolicy;
 
-    public ProductCatalogueService(HttpClient httpClient, IMapper mapper)
+    public ProductCatalogueService(HttpClient httpClient, IMapper mapper, ILogger<ProductCatalogueService> logger)
     {
         _httpClient = httpClient;
+        _mapper = mapper;
+        _logger = logger ?? throw new ArgumentException("Logger not initialised", nameof(logger));
         _retryPolicy = Policy
             .Handle<HttpRequestException>()
             .OrResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
-            .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(2));
-        _mapper = mapper;
+            .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(2), (outcome, timespan, retryAttempt, context) =>
+            {
+                _logger.LogWarning(
+                    $"Retry No - {retryAttempt}");
+            });
     }
-    
+
     public async Task<IEnumerable<Product>> GetProducts()
     {
         try
@@ -36,6 +42,7 @@ public class ProductCatalogueService : IProductCatalogueService
         }
         catch (HttpRequestException e)
         {
+            _logger.LogError($"Failed to retrieve products:");
             throw new Exception("Unable to retrieve products after multiple retries.", e);
         }
     }

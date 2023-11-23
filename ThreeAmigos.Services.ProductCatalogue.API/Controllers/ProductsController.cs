@@ -18,7 +18,7 @@ public class ProductsController : ControllerBase
         _logger = logger;
         _mediator = mediator;
     }
-    
+
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpGet]
