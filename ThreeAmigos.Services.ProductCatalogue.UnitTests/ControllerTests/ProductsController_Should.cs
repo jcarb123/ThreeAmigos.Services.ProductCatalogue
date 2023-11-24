@@ -21,7 +21,7 @@ public class ProductsControllerShould : TestBase
         var query = new GetProducts.Query();
         var mockResult = new GetProducts.Result
         {
-            Products = new List<Product>()
+            Products = new List<Product>
             {
                 ProductStub
             }

@@ -1,10 +1,10 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Moq;
+using Shouldly;
 using ThreeAmigos.Services.ProductCatalogue.API.Models;
 using ThreeAmigos.Services.ProductCatalogue.API.Operations.GetProducts;
 using Xunit;
-using Moq;
-using Shouldly;
 
 namespace ThreeAmigos.Services.ProductCatalogue.UnitTests.FeatureTests.GetProductsTest;
 
