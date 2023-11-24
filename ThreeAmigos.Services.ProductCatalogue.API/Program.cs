@@ -1,8 +1,6 @@
 using System.Reflection;
 using ThreeAmigos.Services.ProductCatalogue.API.Services;
 
-const string myAllowSpecificOrigins = "_myAllowSpecificOrigins";
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
