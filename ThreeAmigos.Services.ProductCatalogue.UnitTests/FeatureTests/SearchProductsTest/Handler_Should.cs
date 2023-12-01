@@ -16,9 +16,9 @@ public class HandlerShould : TestBase
     public async Task Return_Products_From_Search()
     {
         // Given
-        var command = new SearchProducts.Command{SearchTerm = "te"};
+        var command = new SearchProducts.Command { SearchTerm = "te" };
 
-        var expectedProducts = new List<Product>
+        var expectedProducts = new List<ProductDto>
         {
             ProductStub
         };

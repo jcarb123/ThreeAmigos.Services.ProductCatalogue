@@ -1,4 +1,6 @@
 using System.Reflection;
+using MongoDB.Driver;
+using ThreeAmigos.Services.ProductCatalogue.API.Models;
 using ThreeAmigos.Services.ProductCatalogue.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,9 +20,16 @@ builder.Services.AddCors(options => options.AddDefaultPolicy(bld =>
 
 builder.Services.AddScoped<IProductCatalogueService, ProductCatalogueService>();
 
-builder.Services.AddHttpClient<IProductCatalogueService, ProductCatalogueService>(client =>
+var connectionString = Environment.GetEnvironmentVariable("COSMOS_DB_CONNECTION_STRING");
+var databaseName = Environment.GetEnvironmentVariable("COSMOS_DB_DATABASE_NAME");
+var collectionName = Environment.GetEnvironmentVariable("COSMOS_DB_COLLECTION_NAME");
+
+builder.Services.AddSingleton<IMongoClient, MongoClient>(s => new MongoClient(connectionString));
+builder.Services.AddScoped(s =>
 {
-    client.BaseAddress = new Uri("http://undercutters.azurewebsites.net");
+    var client = s.GetRequiredService<IMongoClient>();
+    var database = client.GetDatabase(databaseName);
+    return database.GetCollection<Product>(collectionName);
 });
 
 var app = builder.Build();

@@ -6,6 +6,6 @@ public static partial class GetProducts
 {
     public class Result
     {
-        public IEnumerable<Product> Products { get; set; } = Enumerable.Empty<Product>();
+        public IEnumerable<ProductDto> Products { get; set; } = Enumerable.Empty<ProductDto>();
     }
 }
