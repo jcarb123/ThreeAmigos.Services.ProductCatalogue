@@ -1,4 +1,5 @@
 using AutoMapper;
+using MongoDB.Driver;
 using Newtonsoft.Json;
 using Polly;
 using Polly.Retry;
@@ -8,46 +9,49 @@ namespace ThreeAmigos.Services.ProductCatalogue.API.Services;
 
 public class ProductCatalogueService : IProductCatalogueService
 {
-    private readonly HttpClient _httpClient;
     private readonly ILogger<ProductCatalogueService> _logger;
     private readonly IMapper _mapper;
-    private readonly AsyncRetryPolicy<HttpResponseMessage> _retryPolicy;
+    private readonly IMongoCollection<Product> _products;
+    private readonly AsyncRetryPolicy _retryPolicy;
 
-    public ProductCatalogueService(HttpClient httpClient, IMapper mapper, ILogger<ProductCatalogueService> logger)
+    public ProductCatalogueService(IMongoCollection<Product> products, IMapper mapper,
+        ILogger<ProductCatalogueService> logger)
     {
-        _httpClient = httpClient;
+        _products = products;
         _mapper = mapper;
         _logger = logger ?? throw new ArgumentException("Logger not initialised", nameof(logger));
         _retryPolicy = Policy
-            .Handle<HttpRequestException>()
-            .OrResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
-            .WaitAndRetryAsync(3, _ => TimeSpan.FromSeconds(2), (outcome, timespan, retryAttempt, context) =>
-            {
-                _logger.LogWarning(
-                    $"Retry No - {retryAttempt}");
-            });
+            .Handle<MongoException>()
+            .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(2),
+                (exception, timespan, retryAttempt, context) =>
+                {
+                    _logger.LogWarning(
+                        $"Attempt {retryAttempt} failed with {exception.Message}. Waiting {timespan} before next retry.");
+                });
     }
 
-    public async Task<IEnumerable<Product>> GetProducts()
+    public async Task<IEnumerable<ProductDto>> GetProducts()
     {
         try
         {
-            var response = await _retryPolicy.ExecuteAsync(() => _httpClient.GetAsync("/api/Product"));
-            response.EnsureSuccessStatusCode();
+            var products = await _retryPolicy.ExecuteAsync(async () =>
+            {
+                return await _products.Find(_ => true).ToListAsync();
+            });
 
-            var content = await response.Content.ReadAsStringAsync();
-            var productDtos = JsonConvert.DeserializeObject<IEnumerable<ProductDto>>(content);
+            var productDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
 
-            return _mapper.Map<IEnumerable<Product>>(productDtos);
+            return productDtos;
         }
-        catch (HttpRequestException e)
+        catch (MongoException e)
         {
-            _logger.LogError("Failed to retrieve products:");
-            throw new Exception("Unable to retrieve products after multiple retries.", e);
+            _logger.LogError($"Failed to retrieve products: {e.Message}");
+            throw new Exception("Unable to retrieve products from the database after multiple retries.", e);
         }
     }
 
-    public async Task<IEnumerable<Product>> SearchProducts(string searchTerm)
+
+    public async Task<IEnumerable<ProductDto>> SearchProducts(string searchTerm)
     {
         var products = await GetProducts();
         var productList = products.ToList();

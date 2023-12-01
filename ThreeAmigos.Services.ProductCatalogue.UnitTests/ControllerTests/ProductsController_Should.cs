@@ -22,7 +22,7 @@ public class ProductsControllerShould : TestBase
         var query = new GetProducts.Query();
         var mockResult = new GetProducts.Result
         {
-            Products = new List<Product>
+            Products = new List<ProductDto>
             {
                 ProductStub
             }
@@ -65,7 +65,7 @@ public class ProductsControllerShould : TestBase
         var notFoundResult = result.Result as NotFoundResult;
         notFoundResult.ShouldNotBeNull();
     }
-    
+
     [Fact]
     public async Task SearchProducts_WhenCalled()
     {
@@ -73,7 +73,7 @@ public class ProductsControllerShould : TestBase
         var command = new SearchProducts.Command();
         var mockResult = new SearchProducts.Result
         {
-            Products = new List<Product>
+            Products = new List<ProductDto>
             {
                 ProductStub
             }

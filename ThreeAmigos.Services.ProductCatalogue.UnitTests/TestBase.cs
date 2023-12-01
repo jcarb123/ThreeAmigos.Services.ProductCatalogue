@@ -12,7 +12,7 @@ public class TestBase
     protected readonly Mock<IMapper> MockMapper;
     protected readonly Mock<IMediator> MockMediator;
     protected readonly Mock<IProductCatalogueService> MockService;
-    protected readonly Product ProductStub;
+    protected readonly ProductDto ProductStub;
 
     protected TestBase()
     {
@@ -20,14 +20,14 @@ public class TestBase
         MockMapper = new Mock<IMapper>();
         MockService = new Mock<IProductCatalogueService>();
         Mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddMaps(AppDomain.CurrentDomain.GetAssemblies())));
-        ProductStub = new Product
+        ProductStub = new ProductDto
         {
-            CategoryName = "Test Category",
-            BrandName = "Test Brand",
             Name = "Test Product",
             Description = "This is a description of the test product.",
-            Price = 11.45m,
-            InStock = true
+            Price = 1.45m,
+            InStock = true,
+            Calories = 123,
+            ImageUrl = "test.png"
         };
     }
 }

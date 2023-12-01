@@ -18,7 +18,7 @@ public class HandlerShould : TestBase
         // Given
         var query = new GetProducts.Query();
 
-        var expectedProducts = new List<Product>
+        var expectedProducts = new List<ProductDto>
         {
             ProductStub
         };
