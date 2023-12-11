@@ -1,6 +1,5 @@
 using AutoMapper;
 using MongoDB.Driver;
-using Newtonsoft.Json;
 using Polly;
 using Polly.Retry;
 using ThreeAmigos.Services.ProductCatalogue.API.Models;
@@ -36,7 +35,7 @@ public class ProductCatalogueService : IProductCatalogueService
         {
             var products = await _retryPolicy.ExecuteAsync(async () =>
             {
-                return await _products.Find(_ => true).ToListAsync();
+                return await _products.Find(p => p.InStock).ToListAsync();
             });
 
             var productDtos = _mapper.Map<IEnumerable<ProductDto>>(products);

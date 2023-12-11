@@ -24,7 +24,7 @@ public class TestBase
         {
             Name = "Test Product",
             Description = "This is a description of the test product.",
-            Price = 1.45m,
+            Price = 1.23m,
             InStock = true,
             Calories = 123,
             ImageUrl = "test.png"

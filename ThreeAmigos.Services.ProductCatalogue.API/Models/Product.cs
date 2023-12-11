@@ -5,12 +5,12 @@ using MongoDB.Bson.Serialization.Attributes;
 namespace ThreeAmigos.Services.ProductCatalogue.API.Models;
 
 /// <summary>
-/// Product model
+///     Product model
 /// </summary>
 public class Product
 {
     /// <summary>
-    /// Document ID of article
+    ///     Document ID of article
     /// </summary>
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
@@ -18,42 +18,42 @@ public class Product
     public string? Id { get; set; }
 
     /// <summary>
-    /// Product code
+    ///     Product code
     /// </summary>
     public string ProductCode { get; set; } = "";
-    
+
     /// <summary>
-    /// Category name of product
+    ///     Category name of product
     /// </summary>
     public string CategoryName { get; set; } = "";
-    
+
     /// <summary>
-    /// Product name
+    ///     Product name
     /// </summary>
     public string Name { get; set; } = "";
-    
+
     /// <summary>
-    /// Product description
+    ///     Product description
     /// </summary>
     public string Description { get; set; } = "";
-    
+
     /// <summary>
-    /// Product price
+    ///     Product price
     /// </summary>
     public decimal Price { get; set; }
-    
+
     /// <summary>
-    /// Product availability status
+    ///     Product availability status
     /// </summary>
     public bool InStock { get; set; }
-    
+
     /// <summary>
-    /// Product calories
+    ///     Product calories
     /// </summary>
     public int Calories { get; set; }
 
     /// <summary>
-    /// Product image url
+    ///     Product image url
     /// </summary>
     public string ImageUrl { get; set; } = "";
 }
