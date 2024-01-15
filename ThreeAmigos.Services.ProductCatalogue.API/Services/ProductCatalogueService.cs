@@ -12,7 +12,6 @@ public class ProductCatalogueService : IProductCatalogueService
     private readonly IMapper _mapper;
     private readonly IMongoCollection<Product> _products;
     private readonly AsyncRetryPolicy _retryPolicy;
-    private bool _hasRetried;
 
     public ProductCatalogueService(IMongoCollection<Product> products, IMapper mapper,
         ILogger<ProductCatalogueService> logger)
@@ -25,28 +24,19 @@ public class ProductCatalogueService : IProductCatalogueService
             .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(2),
                 (exception, timespan, retryAttempt, context) =>
                 {
-                    _hasRetried = true;
-                    _logger.LogWarning(
-                        $"GetProducts - Attempt {retryAttempt} failed with {exception.Message}. Waiting {timespan} before next retry.");
+                    _logger.LogInformation(
+                        $"Attempt {retryAttempt} failed with {exception.Message}. Waiting {timespan} before next retry.");
                 });
     }
 
     public async Task<IEnumerable<ProductDto>> GetProducts()
     {
-        _hasRetried = false;
-
         try
         {
-            var products = await _retryPolicy
-                .ExecuteAsync(async context => { return await _products.Find(p => p.InStock).ToListAsync(); },
-                    new Context("GetProducts"))
-                .ContinueWith(task =>
-                {
-                    if (_hasRetried && task.Status == TaskStatus.RanToCompletion)
-                        _logger.LogInformation("GetProducts operation succeeded after one or more retries.");
-
-                    return task;
-                }).Unwrap();
+            var products = await _retryPolicy.ExecuteAsync(async () =>
+            {
+                return await _products.Find(p => p.InStock).ToListAsync();
+            });
 
             var productDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
 
@@ -54,10 +44,11 @@ public class ProductCatalogueService : IProductCatalogueService
         }
         catch (MongoException e)
         {
-            _logger.LogError($"Failed to retrieve products in GetProducts: {e.Message}");
-            throw;
+            _logger.LogError($"Failed to retrieve products: {e.Message}");
+            throw new Exception("Unable to retrieve products from the database after multiple retries.", e);
         }
     }
+
 
     public async Task<IEnumerable<ProductDto>> SearchProducts(string searchTerm)
     {
